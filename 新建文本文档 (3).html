@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职场压力测评 - 专业评估您的压力水平</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF7EB9', // 粉色
+                        secondary: '#9A7BFF', // 紫色
+                        accent: '#FF5E9C',
+                        light: '#FFF5F9',
+                        dark: '#1E1B4B'
+                    },
+                    fontFamily: {
+                        sans: ['"PingFang SC"', '"Microsoft YaHei"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'card': '0 10px 30px -5px rgba(154, 123, 255, 0.1)',
+                        'btn': '0 4px 14px 0 rgba(154, 123, 255, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', '"PingFang SC"', sans-serif;
+            background: linear-gradient(135deg, #FFF5F9 0%, #F0EBFF 100%);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .option-item label {
+            transition: all 0.3s ease;
+        }
+        
+        .option-item input:checked + span {
+            background: rgba(154, 123, 255, 0.1);
+            border-color: #9A7BFF;
+        }
+        
+        @media (max-width: 640px) {
+            .question-card {
+                padding: 1.5rem;
+            }
+            
+            .kpi-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <div class="flex justify-center items-center mb-4">
+                <i class="fas fa-brain text-primary text-3xl mr-3"></i>
+                <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    职场压力测评
+                </h1>
+            </div>
+            <p class="text-gray-600 text-lg mb-2">72题 · 20分钟 · 专业解读</p>
+            <p class="text-gray-500 text-sm">已有超过100,000+职场人完成测评</p>
+        </header>
+        <main>
+            <section id="welcome-screen">
+                <div class="bg-white rounded-2xl shadow-card p-6 md:p-8 mb-8">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 mb-6">
+                            <i class="fas fa-chart-line text-4xl text-gradient"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-4">解锁你的职场压力密码</h2>
+                        <p class="text-gray-600 mb-6">通过科学测评，了解压力来源，获取个性化缓解方案</p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                            <div class="text-center p-3">
+                                <div class="text-primary text-2xl mb-1"><i class="far fa-clock"></i></div>
+                                <p class="text-sm text-gray-600">20分钟</p>
+                            </div>
+                            <div class="text-center p-3">
+                                <div class="text-primary text-2xl mb-1"><i class="fas fa-list-ol"></i></div>
+                                <p class="text-sm text-gray-600">72题</p>
+                            </div>
+                            <div class="text-center p-3">
+                                <div class="text-primary text-2xl mb-1"><i class="fas fa-chart-pie"></i></div>
+                                <p class="text-sm text-gray-600">专业分析</p>
+                            </div>
+                            <div class="text-center p-3">
+                                <div class="text-primary text-2xl mb-1"><i class="fas fa-lightbulb"></i></div>
+                                <p class="text-sm text-gray-600">缓解建议</p>
+                            </div>
+                        </div>
+                        
+                        <button id="start-assessment" class="bg-gradient-to-r from-primary to-secondary text-white font-bold py-3 px-8 rounded-full shadow-btn hover:shadow-lg transition-all transform hover:-translate-y-1">
+                            开始测评
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white rounded-xl shadow-card p-5 transition-all hover:shadow-lg">
+                        <div class="text-primary text-xl mb-3"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3 class="font-bold mb-2">压力水平</h3>
+                        <p class="text-sm text-gray-600">全面评估你的职场压力指数</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-card p-5 transition-all hover:shadow-lg">
+                        <div class="text-primary text-xl mb-3"><i class="fas fa-search"></i></div>
+                        <h3 class="font-bold mb-2">压力来源</h3>
+                        <p class="text-sm text-gray-600">精准定位压力产生的关键因素</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-card p-5 transition-all hover:shadow-lg">
+                        <div class="text-primary text-xl mb-3"><i class="fas fa-heart"></i></div>
+                        <h3 class="font-bold mb-2">缓解方案</h3>
+                        <p class="text-sm text-gray-600">获取个性化的压力管理建议</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-card p-6">
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <i class="fas fa-info-circle text-primary mr-2"></i> 测评说明
+                    </h3>
+                    <ul class="space-y-2 text-gray-600 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>包含72个关于工作压力的问题，评估7大压力维度</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>请根据最近一周的实际感受作答，选择最符合你的选项</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>测评结果仅用于个人发展参考，我们将严格保密你的数据</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-primary mt-1 mr-2"></i>
+                            <span>完成测评后可获得详细分析报告和个性化缓解建议</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section id="assessment-screen" class="hidden">
+                <div class="bg-white rounded-xl shadow-card p-4 mb-6 flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <div class="relative mr-4">
+                            <svg class="w-16 h-16" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="16" fill="none" stroke="#E2E8F0" stroke-width="3"></circle>
+                                <circle id="progress-ring" class="progress-ring-circle" cx="18" cy="18" r="16" fill="none" stroke="#FF7EB9" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="100"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center flex-col">
+                                <span id="progress-text" class="text-sm font-bold">0%</span>
+                                <span id="question-count" class="text-xs text-gray-500">0/72题</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500">答题进度</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="mr-2 text-primary">
+                            <i class="far fa-clock"></i>
+                        </div>
+                        <div>
+                            <span class="text-sm text-gray-500">剩余时间</span>
+                            <div id="timer" class="text-lg font-bold">20:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-card p-6 mb-6">
+                    <div id="question-container">
+                        <div class="text-center py-12">
+                            <i class="fas fa-spinner fa-spin text-3xl text-primary/50 mb-4"></i>
+                            <p class="text-gray-500">加载题目中...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button id="prev-btn" class="px-4 py-2 md:px-6 md:py-3 border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i>上一题
+                        </button>
+                        <button id="next-btn" class="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-btn hover:shadow-lg transition-all">
+                            下一题<i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                        <button id="submit-btn" class="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-btn hover:shadow-lg transition-all hidden">
+                            提交测评<i class="fas fa-check ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-card p-4">
+                    <div class="text-xs text-gray-500 w-full mb-2">题目导航:</div>
+                    <div class="flex flex-wrap gap-2" id="question-navigation">
+                        </div>
+                </div>
+            </section>
+            <section id="results-screen" class="hidden">
+                <div class="bg-white rounded-2xl shadow-card p-8 mb-8">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 mb-6">
+                            <div class="text-center">
+                                <span id="total-score" class="text-5xl font-bold text-gray-800">0</span>
+                                <span class="text-xl text-gray-500">/100</span>
+                            </div>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2" id="score-title">压力评估结果</h2>
+                        <p class="text-gray-600 max-w-lg mx-auto" id="score-description">
+                            你的职场压力评估结果将在这里显示，包含详细的分析和建议。
+                        </p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-6 text-center">压力维度分布</h3>
+                        <div class="relative w-full h-[400px] md:h-[500px]" id="radar-chart-container">
+                            <div class="flex flex-col items-center justify-center h-full">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center mb-4">
+                                    <i class="fas fa-chart-pie text-3xl text-primary"></i>
+                                </div>
+                                <p class="text-gray-600">正在生成分析图表...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="dimensions-analysis" class="space-y-6">
+                        </div>
+                    
+                    <div class="mt-10 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-primary mr-2"></i>个性化缓解建议
+                        </h3>
+                        <ul id="improvement-suggestions" class="space-y-3 text-gray-700">
+                            </ul>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+                        <button id="restart-assessment" class="px-6 py-3 border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50">
+                            <i class="fas fa-redo mr-2"></i>重新测评
+                        </button>
+                        <button id="save-report" class="px-6 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full shadow-btn hover:shadow-lg transition-all">
+                            <i class="fas fa-download mr-2"></i>保存报告
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center text-gray-500 text-sm mt-12 pb-8">
+            <p>© 2025 职场压力测评 | 专业评估工具</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <button class="text-gray-400 hover:text-primary transition-colors">
+                    <i class="fab fa-weixin text-xl"></i>
+                </button>
+                <button class="text-gray-400 hover:text-primary transition-colors">
+                    <i class="fab fa-weibo text-xl"></i>
+                </button>
+                <button class="text-gray-400 hover:text-primary transition-colors">
+                    <i class="fab fa-linkedin-in text-xl"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // 从用户提供的文档中提取的压力维度
+        const pressureDimensions = {
+            narcissistic: {
+                name: "自恋人格",
+                description: "对自己有比较现实的认知。为人自信，但对自己的天赋与能力有更现实的认知，不会过于夸大。",
+                subDimensions: [
+                    { name: "过度自信", score: 5, level: "中等" },
+                    { name: "自命不凡", score: 5, level: "中等" }
+                ],
+                behaviors: [
+                    "能够兼顾考虑自己和他人的需求。在团队中可以同时考虑自己和他人的立场",
+                    "能够换位思考，可以接受别人的不同想法或批评意见，愿意听取他人的意见。"
+                ]
+            },
+            depression: {
+                name: "抑郁倾向",
+                description: "持续情绪低落、兴趣减退、精力不足、自罪自责",
+                subDimensions: [
+                    { name: "脆弱自卑", score: 4, level: "中等" },
+                    { name: "负面消极", score: 6, level: "中等" }
+                ],
+                behaviors: [
+                    "具有一定的心理承受力。有一定的自尊心，对自己有基本的接纳",
+                    "在压力下不会轻易放弃，有基本的自我价值感。情绪状态能基本保持正向平和。"
+                ]
+            },
+            emotional: {
+                name: "情绪无常",
+                description: "情绪、人际关系与自我认知的不稳定性与行事冲动性",
+                subDimensions: [
+                    { name: "性情多变", score: 5, level: "中等" },
+                    { name: "忽冷忽热", score: 6, level: "中等" },
+                    { name: "迷茫倦怠", score: 5, level: "中等" }
+                ],
+                behaviors: [
+                    "较少情绪化，不易动怒。工作中情绪比较稳定，较少情绪化",
+                    "在压力状况下不会太激动或情绪化。能够与他人保持相对稳定的人际交往关系。"
+                ]
+            },
+            sensitive: {
+                name: "敏感多疑",
+                description: "过分警觉、多疑、心胸狭隘、好嫉妒、固执",
+                subDimensions: [
+                    { name: "人性本恶", score: 8, level: "比较高" },
+                    { name: "缺乏信任", score: 5, level: "中等" },
+                    { name: "容易记仇", score: 8, level: "比较高" }
+                ],
+                behaviors: [
+                    "对人性持负面观点。认为人性本恶，在合作中容易产生消极情绪",
+                    "对他人缺乏信任。愿意相信他人。在人际交往中，愿意相信别人，能够接受批评和建议。"
+                ]
+            },
+            impulsive: {
+                name: "冲动违规",
+                description: "漠视规则、行事冲动、不负责任、侵犯他人利益而毫无悔意",
+                subDimensions: [
+                    { name: "行事冲动", score: 7, level: "中等" },
+                    { name: "冒险违规", score: 8, level: "比较高" },
+                    { name: "不择手段", score: 10, level: "非常高" }
+                ],
+                behaviors: [
+                    "行事不会太过冲动。做事通常会三思而后行，谨慎思考。",
+                    "不守规矩，不愿意按规则行事。灵活权宜，往往对规范和纪律缺乏遵循意识。"
+                ]
+            },
+            anger: {
+                name: "愤怒敌意",
+                description: "对他人不信任，脾气急躁易怒、缺乏耐心、更容易出现外显侵犯行为",
+                subDimensions: [
+                    { name: "愤怒失控", score: 6, level: "中等" },
+                    { name: "愤世嫉俗", score: 6, level: "中等" }
+                ],
+                behaviors: [
+                    "不轻易情绪失控。不太会情绪化，对他人有一定耐心，不会轻易急躁",
+                    "也没有太强的报复心理。对周围人员有基本的信任感。不太倾向于从人性本恶的视角看待他人。"
+                ]
+            },
+            negativity: {
+                name: "消极抵制",
+                description: "内心充满负面消极情绪、以隐蔽的方式发泄不满",
+                subDimensions: [
+                    { name: "感到不公", score: 4, level: "中等" },
+                    { name: "阳奉阴违", score: 8, level: "比较高" }
+                ],
+                behaviors: [
+                    "心态平和，感到环境公平。在合作中有较为积极的态度，乐观开朗。",
+                    "采用消极的方式表达不满与攻击性。回避工作、社会义务或家庭义务等。"
+                ]
+            }
+        };
+        // 压力缓解建议
+        const improvementSuggestions = {
+            narcissistic: "培养团队合作意识，学会倾听他人意见，认识到团队协作的重要性。",
+            depression: "建立积极的心态，每天记录三件值得感恩的事情，培养乐观思维。",
+            emotional: "学习情绪管理技巧，尝试冥想或深呼吸练习，提高情绪稳定性。",
+            sensitive: "练习信任他人，避免过度解读他人行为，培养宽容心态。",
+            impulsive: "培养三思而后行的习惯，重要决策前给自己冷静思考的时间。",
+            anger: "学习愤怒管理技巧，遇到冲突时先冷静再沟通，避免情绪化反应。",
+            negativity: "采取积极的问题解决态度，直接沟通问题，避免消极抵制行为。"
+        };
+        // 从用户提供的文档中提取的72道题目
+        const assessmentQuestions = [
+            { id: 1, text: "利用别人后，我很少有负罪感，做了就做了", dimension: "impulsive" },
+            { id: 2, text: "我有很多心事。", dimension: "depression" },
+            { id: 3, text: "经常有一些自称是朋友的人却出卖了我，这种人绝对不能原谅。", dimension: "sensitive" },
+            { id: 4, text: "我是个重要人物。", dimension: "narcissistic" },
+            { id: 5, text: "我经常改变自己的职业选择以及想要在一生中做什么的想法。", dimension: "emotional" },
+            { id: 6, text: "如果必要的话，我会欺骗别人来达到自己的目的。", dimension: "impulsive" },
+            { id: 7, text: "我会尝试做一些别人看起来很疯狂的事情。", dimension: "impulsive" },
+            { id: 8, text: "我很容易对人感到不耐烦。", dimension: "anger" },
+            { id: 9, text: "适当的时候，我会占些小便宜。", dimension: "impulsive" },
+            { id: 10, text: "合作中，别人老是把他们的事推给我，期望我把所有事都做了。", dimension: "negativity" },
+            { id: 11, text: "几乎每件我做过的事，我都很擅长。", dimension: "narcissistic" },
+            { id: 12, text: "这个社会上，基本没什么人真正值得信任。", dimension: "sensitive" },
+            { id: 13, text: "我的情绪起伏不定!", dimension: "emotional" },
+            { id: 14, text: "在和很多人相处中，我对他们的感觉常常是从赞赏到失望。", dimension: "emotional" },
+            { id: 15, text: "我早上起来的时候，多半觉得睡眠充足，头脑清醒。", dimension: "depression" },
+            { id: 16, text: "我有时也会假公济私，为自己人做些事情。", dimension: "impulsive" },
+            { id: 17, text: "很多人帮你，其实更多是另有企图。", dimension: "sensitive" },
+            { id: 18, text: "我常凭一时冲动做出某些事情。", dimension: "impulsive" },
+            { id: 19, text: "我容易发怒", dimension: "anger" },
+            { id: 20, text: "我似乎和我周围的人一样精明能干。", dimension: "narcissistic" },
+            { id: 21, text: "人不该轻易原谅那些伤害过自己的人。", dimension: "sensitive" },
+            { id: 22, text: "利用别人后，我很少有负罪感，做了就做了。", dimension: "impulsive" },
+            { id: 23, text: "有些人永远不值得原谅。", dimension: "sensitive" },
+            { id: 24, text: "为我不喜欢的人做事，有时我会拖延。", dimension: "negativity" },
+            { id: 25, text: "我曾对某人极为愤怒，以至于感觉自己要爆炸。", dimension: "anger" },
+            { id: 26, text: "我每天都记录自己的心得，反思提高。", dimension: "depression" },
+            { id: 27, text: "很多时候别人不理解不同情我。", dimension: "sensitive" },
+            { id: 28, text: "我的记忆力似乎还不错。", dimension: "depression" },
+            { id: 29, text: "批评和责骂使我非常伤心。", dimension: "sensitive" },
+            { id: 30, text: "除了自己，最好不要轻信别人。", dimension: "sensitive" },
+            { id: 31, text: "只要可能，大多数的公司都会剥削欺诈自己", dimension: "negativity" },
+            { id: 32, text: "如果别人要我做不喜欢的事情，我会先接下来，然后找借口不做。", dimension: "negativity" },
+            { id: 33, text: "我时常得听从某些人的指挥，其实他们还不如我高明", dimension: "narcissistic" },
+            { id: 34, text: "我不爱记仇。", dimension: "sensitive" },
+            { id: 35, text: "近来，我觉得很容易放弃对某些事物的希望。", dimension: "depression" },
+            { id: 36, text: "大多数慈善家其实都是伪善的", dimension: "negativity" },
+            { id: 37, text: "如果由我来管理一家公司，我一定会所它打造成行业顶尖。", dimension: "narcissistic" },
+            { id: 38, text: "我和他人的关系经常是从一个极端到另一个极端。", dimension: "emotional" },
+            { id: 39, text: "我是一个特别守规矩的人", dimension: "impulsive" },
+            { id: 40, text: "许多人很欣赏我", dimension: "narcissistic" },
+            { id: 41, text: "我在任何时候都能保持沉着冷静。", dimension: "emotional" },
+            { id: 42, text: "我是天生的领导者", dimension: "narcissistic" },
+            { id: 43, text: "大多数所谓玩笑其实是恶意的，往往是为了嘲笑别人，抬高自己", dimension: "sensitive" },
+            { id: 44, text: "我天赋异禀，迟早会有一番作为。", dimension: "narcissistic" },
+            { id: 45, text: "有时，为了达成良好的结果，也可以不遵守规章制度", dimension: "impulsive" },
+            { id: 46, text: "我和周围人的关系，时好时坏。", dimension: "emotional" },
+            { id: 47, text: "我是一个特别值得关注的人", dimension: "narcissistic" },
+            { id: 48, text: "我的胃口很好", dimension: "depression" },
+            { id: 49, text: "我对自己的看法频繁改变，以至于有时我都不知道自己到底是谁", dimension: "emotional" },
+            { id: 50, text: "我的朋友认为，我是个有些古怪的人", dimension: "emotional" },
+            { id: 51, text: "在很多事上，我做的都比我认识的其他人要好", dimension: "narcissistic" },
+            { id: 52, text: "我一定不会把当天的事情拖到明天去做。", dimension: "negativity" },
+            { id: 53, text: "当我真的生气时，感到自己似乎要摧毁一切。", dimension: "anger" },
+            { id: 54, text: "我觉得自己拥有超人的天赋，生来就可以成就一番成就", dimension: "narcissistic" },
+            { id: 55, text: "只要我真的尽力去做一件事，我就能做好", dimension: "narcissistic" },
+            { id: 56, text: "当我正在做一件重要的事情的时候，如果有人向我请教或打扰我，我会不耐烦。", dimension: "anger" },
+            { id: 57, text: "我比较有耐心，很不容易被激怒", dimension: "anger" },
+            { id: 58, text: "人们迟早会发现我的重要性", dimension: "narcissistic" },
+            { id: 59, text: "事事寻求安全的生活是无趣的", dimension: "impulsive" },
+            { id: 60, text: "我做事情有时会虎头蛇尾", dimension: "negativity" },
+            { id: 61, text: "有引起规矩的存在就是为了打破的", dimension: "impulsive" },
+            { id: 62, text: "我碰到一些问题。使我感到犹豫不决", dimension: "depression" },
+            { id: 63, text: "我提防那些对我过分亲近的人", dimension: "sensitive" },
+            { id: 64, text: "我确实缺少自信心", dimension: "depression" },
+            { id: 65, text: "我常发现别人嫉妒我的好主意，因为他们没能先想到。", dimension: "narcissistic" },
+            { id: 66, text: "大多数晚上我睡觉时，不受什么思想干扰", dimension: "depression" },
+            { id: 67, text: "有时我真想摔东西", dimension: "anger" },
+            { id: 68, text: "有时人们认为我有些胆怯", dimension: "depression" },
+            { id: 69, text: "世上无所谓忠诚，只是诱惑不够大", dimension: "sensitive" },
+            { id: 70, text: "周边的人，常常让我感到很失望", dimension: "negativity" },
+            { id: 71, text: "我很少发脾气", dimension: "anger" },
+            { id: 72, text: "遇到失败，我能很快摆脱沮丧感", dimension: "depression" }
+        ];
+        // 页面状态变量
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let timerInterval;
+        let remainingTime = 20 * 60; // 20分钟，单位秒
+        let assessmentStarted = false;
+        // DOM元素
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const assessmentScreen = document.getElementById('assessment-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startAssessmentBtn = document.getElementById('start-assessment');
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressRing = document.getElementById('progress-ring');
+        const progressText = document.getElementById('progress-text');
+        const questionCount = document.getElementById('question-count');
+        const timerDisplay = document.getElementById('timer');
+        const restartAssessmentBtn = document.getElementById('restart-assessment');
+        const saveReportBtn = document.getElementById('save-report');
+        const questionNavContainer = document.getElementById('question-navigation');
+        const radarChartContainer = document.getElementById('radar-chart-container');
+        const dimensionsAnalysis = document.getElementById('dimensions-analysis');
+        const suggestionsList = document.getElementById('improvement-suggestions');
+        const totalScoreElement = document.getElementById('total-score');
+        const scoreTitleElement = document.getElementById('score-title');
+        const scoreDescriptionElement = document.getElementById('score-description');
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化进度环
+            initProgressRing();
+            
+            // 生成题目导航点
+            generateQuestionNavigation();
+            
+            // 事件监听
+            startAssessmentBtn.addEventListener('click', startAssessment);
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', submitAssessment);
+            restartAssessmentBtn && restartAssessmentBtn.addEventListener('click', restartAssessment);
+            saveReportBtn && saveReportBtn.addEventListener('click', saveReport);
+        });
+        // 初始化进度环
+        function initProgressRing() {
+            if (progressRing) {
+                const radius = progressRing.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+                progressRing.style.strokeDashoffset = circumference;
+            }
+        }
+        // 更新进度环
+        function updateProgress(percent) {
+            if (progressRing) {
+                const radius = progressRing.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                const offset = circumference - (percent / 100) * circumference;
+                progressRing.style.strokeDashoffset = offset;
+                progressText.textContent = `${percent}%`;
+            }
+        }
+        // 生成题目导航点
+        function generateQuestionNavigation() {
+            if (!questionNavContainer) return;
+            
+            questionNavContainer.innerHTML = '';
+            
+            assessmentQuestions.forEach((_, index) => {
+                const navDot = document.createElement('button');
+                navDot.className = 'w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs text-gray-500 hover:bg-gray-100 transition-colors';
+                navDot.textContent = index + 1;
+                navDot.addEventListener('click', () => jumpToQuestion(index));
+                navDot.dataset.questionIndex = index;
+                questionNavContainer.appendChild(navDot);
+            });
+        }
+        // 更新题目导航点状态
+        function updateQuestionNavigation() {
+            const navDots = document.querySelectorAll('#question-navigation button');
+            
+            navDots.forEach((dot, index) => {
+                // 重置所有导航点
+                dot.classList.remove('bg-primary', 'border-primary', 'text-white', 'bg-primary/20');
+                
+                // 当前题目
+                if (index === currentQuestionIndex) {
+                    dot.classList.add('bg-primary', 'border-primary', 'text-white');
+                } 
+                // 已回答题目
+                else if (answers[index] !== undefined) {
+                    dot.classList.add('bg-primary/20', 'border-primary');
+                }
+            });
+        }
+        // 开始测评
+        function startAssessment() {
+            if (welcomeScreen && assessmentScreen) {
+                welcomeScreen.classList.add('hidden');
+                assessmentScreen.classList.remove('hidden');
+                
+                // 加载第一题
+                loadQuestion(currentQuestionIndex);
+                
+                // 更新进度
+                updateProgress(0);
+                questionCount.textContent = `1/72题`;
+                
+                // 启动计时器
+                startTimer();
+                
+                assessmentStarted = true;
+            }
+        }
+        // 加载题目
+        function loadQuestion(index) {
+            const question = assessmentQuestions[index];
+            
+            // 更新导航状态
+            updateQuestionNavigation();
+            
+            // 构建题目HTML
+            const questionHTML = `
+                <div class="question-content">
+                    <h3 class="text-xl font-bold mb-6">${question.text}</h3>
+                    <div class="space-y-4">
+                        <div class="option-item">
+                            <label class="flex items-center p-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="q-${question.id}" value="1" class="mr-4 text-primary">
+                                <span class="w-full">非常不符合</span>
+                            </label>
+                        </div>  
+                        <div class="option-item">
+                            <label class="flex items-center p-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="q-${question.id}" value="2" class="mr-4 text-primary">
+                                <span class="w-full">不太符合</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="flex items-center p-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="q-${question.id}" value="3" class="mr-4 text-primary">
+                                <span class="w-full">不确定</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="flex items-center p-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="q-${question.id}" value="4" class="mr-4 text-primary">
+                                <span class="w-full">比较符合</span>
+                            </label>
+                        </div>
+                        <div class="option-item">
+                            <label class="flex items-center p-4 border border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="q-${question.id}" value="5" class="mr-4 text-primary">
+                                <span class="w-full">非常符合</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            questionContainer.innerHTML = questionHTML;
+            
+            // 添加选项点击事件
+            const radioInputs = questionContainer.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    answers[index] = parseInt(e.target.value);
+                    
+                    // 更新选项样式
+                    document.querySelectorAll('.option-item label').forEach(label => {
+                        label.classList.remove('bg-primary/10', 'border-primary');
+                    });
+                    e.target.closest('label').classList.add('bg-primary/10', 'border-primary');
+                    
+                    // 如果是最后一题且已回答，显示提交按钮
+                    if (index === assessmentQuestions.length - 1) {
+                        nextBtn.classList.add('hidden');
+                        submitBtn.classList.remove('hidden');
+                    } else {
+                        nextBtn.disabled = false;
+                    }
+                });
+            });
+            
+            // 如果有已保存的答案，选中它
+            if (answers[index] !== undefined) {
+                const radioToSelect = questionContainer.querySelector(`input[value="${answers[index]}"]`);
+                if (radioToSelect) {
+                    radioToSelect.checked = true;
+                    radioToSelect.closest('label').classList.add('bg-primary/10', 'border-primary');
+                }
+            }
+            
+            // 更新导航按钮状态
+            prevBtn.disabled = index === 0;
+            
+            // 如果是最后一题，显示提交按钮
+            if (index === assessmentQuestions.length - 1) {
+                nextBtn.classList.add('hidden');
+                
+                // 如果已回答，显示提交按钮
+                if (answers[index] !== undefined) {
+                    submitBtn.classList.remove('hidden');
+                } else {
+                    submitBtn.classList.remove('hidden');
+                }
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                
+                // 如果当前题已回答，启用下一题按钮
+                nextBtn.disabled = answers[index] === undefined;
+            }
+        }
+        // 跳转到指定题目
+        function jumpToQuestion(index) {
+            if (index >= 0 && index < assessmentQuestions.length) {
+                currentQuestionIndex = index;
+                loadQuestion(currentQuestionIndex);
+                
+                // 更新进度
+                const progressPercent = Math.round(((currentQuestionIndex + 1) / assessmentQuestions.length) * 100);
+                updateProgress(progressPercent);
+                questionCount.textContent = `${currentQuestionIndex + 1}/72题`;
+            }
+        }
+        // 上一题
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+                
+                // 更新进度
+                const progressPercent = Math.round(((currentQuestionIndex + 1) / assessmentQuestions.length) * 100);
+                updateProgress(progressPercent);
+                questionCount.textContent = `${currentQuestionIndex + 1}/72题`;
+            }
+        }
+        // 下一题
+        function goToNextQuestion() {
+            if (currentQuestionIndex < assessmentQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+                
+                // 更新进度
+                const progressPercent = Math.round(((currentQuestionIndex + 1) / assessmentQuestions.length) * 100);
+                updateProgress(progressPercent);
+                questionCount.textContent = `${currentQuestionIndex + 1}/72题`;
+            }
+        }
+        // 开始计时器
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimerDisplay();
+                
+                // 时间到，自动提交
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    submitAssessment();
+                }
+            }, 1000);
+        }
+        // 更新计时器显示
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // 时间少于5分钟时变红
+            if (remainingTime < 5 * 60) {
+                timerDisplay.classList.add('text-red-500');
+            } else {
+                timerDisplay.classList.remove('text-red-500');
+            }
+        }
+        // 提交测评
+        function submitAssessment() {
+            // 停止计时器
+            clearInterval(timerInterval);
+            
+            // 计算结果
+            const results = calculateResults();
+            
+            // 显示结果页面
+            assessmentScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            // 生成结果报告
+            generateResultsReport(results);
+        }
+        // 计算测评结果
+        function calculateResults() {
+            // 维度得分计算
+            const dimensions = JSON.parse(JSON.stringify(pressureDimensions));
+            
+            // 汇总各维度得分
+            for (let i = 0; i < assessmentQuestions.length; i++) {
+                const question = assessmentQuestions[i];
+                const answer = answers[i] || 3; // 未回答的题目按中间值3分计算
+                
+                if (dimensions[question.dimension]) {
+                    // 累加得分
+                    if (!dimensions[question.dimension].totalScore) {
+                        dimensions[question.dimension].totalScore = 0;
+                        dimensions[question.dimension].questionCount = 0;
+                    }
+                    
+                    dimensions[question.dimension].totalScore += answer;
+                    dimensions[question.dimension].questionCount++;
+                }
+            }
+            
+            // 计算平均分（转换为0-10分制）
+            let overallScore = 0;
+            let dimensionScores = [];
+            
+            for (const key in dimensions) {
+                if (dimensions[key].questionCount > 0) {
+                    // 计算平均分（5分制）
+                    const avgScore = dimensions[key].totalScore / dimensions[key].questionCount;
+                    
+                    // 转换为10分制
+                    const score10 = Math.round((avgScore / 5) * 10);
+                    dimensions[key].score10 = score10;
+                    
+                    // 累加到总分（转换为0-100分制）
+                    overallScore += score10;
+                    
+                    // 添加到维度得分数组（用于雷达图）
+                    dimensionScores.push({
+                        name: dimensions[key].name,
+                        value: score10
+                    });
+                }
+            }
+            
+            // 计算总体得分（平均各维度得分，转换为0-100分制）
+            overallScore = Math.round((overallScore / Object.keys(dimensions).length) * 10);
+            
+            // 生成建议
+            const suggestions = generateSuggestions(dimensions);
+            
+            return {
+                overallScore,
+                dimensions,
+                dimensionScores,
+                suggestions
+            };
+        }
+        // 生成建议
+        function generateSuggestions(dimensions) {
+            const suggestions = [];
+            
+            // 根据高分维度生成压力缓解建议
+            for (const key in dimensions) {
+                if (dimensions[key].score10 !== undefined && dimensions[key].score10 > 7) {
+                    if (improvementSuggestions[key]) {
+                        suggestions.push(improvementSuggestions[key]);
+                    }
+                }
+            }
+            
+            // 如果建议不足3条，添加通用建议
+            if (suggestions.length < 3) {
+                suggestions.push("建立规律的作息习惯，保证充足睡眠，提高身体抗压能力。");
+                suggestions.push("学习放松技巧，如深呼吸、冥想或瑜伽，缓解紧张情绪。");
+                suggestions.push("合理规划工作任务，设置优先级，避免过度承诺和任务堆积。");
+            }
+            
+            return suggestions;
+        }
+        // 生成结果报告
+        function generateResultsReport(results) {
+            // 更新标题和描述
+            let scoreTitle, scoreDescription;
+            
+            if (results.overallScore >= 80) {
+                scoreTitle = "高压力风险";
+                scoreDescription = "你的职场压力水平较高，可能对身心健康产生负面影响。建议立即采取缓解措施，必要时寻求专业帮助。";
+            } else if (results.overallScore >= 60) {
+                scoreTitle = "中等压力风险";
+                scoreDescription = "你的职场压力处于中等水平，部分维度存在明显压力来源。通过针对性调整，可以有效降低压力水平。";
+            } else if (results.overallScore >= 40) {
+                scoreTitle = "较低压力风险";
+                scoreDescription = "你的职场压力处于较低水平，大部分维度表现良好。保持当前的压力管理方式，关注潜在压力源。";
+            } else {
+                scoreTitle = "低压力风险";
+                scoreDescription = "你的职场压力水平很低，拥有健康的心理状态和良好的压力应对能力。继续保持积极的生活和工作态度。";
+            }
+            
+            totalScoreElement.textContent = results.overallScore;
+            scoreTitleElement.textContent = scoreTitle;
+            scoreDescriptionElement.textContent = scoreDescription;
+            
+            // 生成雷达图
+            generateRadarChart(results.dimensionScores);
+            
+            // 生成维度分析
+            generateDimensionsAnalysis(results.dimensions);
+            
+            // 生成建议
+            generateSuggestionsList(results.suggestions);
+        }
+        
+        // 生成雷达图 (使用 Chart.js)
+        function generateRadarChart(dimensionScores) {
+            // 1. 清空容器并创建 Canvas 元素
+            radarChartContainer.innerHTML = '<canvas id="radarChart"></canvas>';
+            
+            // 2. 准备数据
+            const labels = dimensionScores.map(item => item.name);
+            const data = dimensionScores.map(item => item.value);
+            
+            // 3. 获取上下文
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            // 4. 创建专业雷达图
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '当前压力水平',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 126, 185, 0.2)', // 对应你的 primary 粉色
+                        borderColor: 'rgba(255, 126, 185, 1)',      // 对应你的 primary 粉色
+                        pointBackgroundColor: 'rgba(154, 123, 255, 1)', // 对应你的 secondary 紫色
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(154, 123, 255, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            tension: 0.3 // 线条平滑度
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10, // 设定最大值为10分
+                            ticks: {
+                                stepSize: 2,
+                                backdropColor: 'transparent', // 去掉刻度背景色，更干净
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: "'PingFang SC', 'Microsoft YaHei', sans-serif",
+                                    weight: 'bold'
+                                },
+                                color: '#4B5563' // 字体深灰色
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // 隐藏图例，保持简洁
+                        }
+                    }
+                }
+            });
+        }
+
+        // 生成维度分析
+        function generateDimensionsAnalysis(dimensions) {
+            dimensionsAnalysis.innerHTML = '';
+            
+            for (const key in dimensions) {
+                if (dimensions[key].score10 !== undefined) {
+                    // 确定得分等级和颜色
+                    let scoreClass, scoreText;
+                    
+                    if (dimensions[key].score10 >= 8) {
+                        scoreClass = 'text-red-500';
+                        scoreText = '高风险';
+                    } else if (dimensions[key].score10 >= 6) {
+                        scoreClass = 'text-yellow-500';
+                        scoreText = '中风险';
+                    } else if (dimensions[key].score10 >= 4) {
+                        scoreClass = 'text-blue-500';
+                        scoreText = '低风险';
+                    } else {
+                        scoreClass = 'text-green-500';
+                        scoreText = '健康';
+                    }
+                    
+                    // 创建维度分析卡片
+                    const dimensionCard = document.createElement('div');
+                    dimensionCard.className = 'bg-gray-50 rounded-xl p-6';
+                    
+                    // 构建子维度HTML
+                    let subDimensionsHTML = '';
+                    if (dimensions[key].subDimensions) {
+                        subDimensionsHTML = '<div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4">';
+                        dimensions[key].subDimensions.forEach(sub => {
+                            subDimensionsHTML += `
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-sm font-medium text-gray-700">${sub.name}</div>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-sm ${getScoreClass(sub.score)}">${sub.score}</span>
+                                        <span class="text-xs text-gray-500 ml-1">(${sub.level})</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        subDimensionsHTML += '</div>';
+                    }
+                    
+                    // 构建行为表现HTML
+                    let behaviorsHTML = '';
+                    if (dimensions[key].behaviors) {
+                        behaviorsHTML = '<ul class="space-y-2 mt-4 text-gray-700">';
+                        dimensions[key].behaviors.forEach(behavior => {
+                            behaviorsHTML += `<li class="flex items-start"><i class="fas fa-check-circle text-primary mt-1 mr-2"></i><span>${behavior}</span></li>`;
+                        });
+                        behaviorsHTML += '</ul>';
+                    }
+                    
+                    dimensionCard.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-lg font-bold">${dimensions[key].name}</h4>
+                            <div class="flex items-center">
+                                <span class="text-2xl font-bold ${scoreClass} mr-2">${dimensions[key].score10}</span>
+                                <span class="text-sm ${scoreClass}">/${10} - ${scoreText}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4">${dimensions[key].description}</p>
+                        ${subDimensionsHTML}
+                        ${behaviorsHTML}
+                    `;
+                    
+                    dimensionsAnalysis.appendChild(dimensionCard);
+                }
+            }
+        }
+        // 获取得分等级样式
+        function getScoreClass(score) {
+            if (score >= 8) return 'text-red-500';
+            if (score >= 6) return 'text-yellow-500';
+            if (score >= 4) return 'text-blue-500';
+            return 'text-green-500';
+        }
+        // 生成建议列表
+        function generateSuggestionsList(suggestions) {
+            suggestionsList.innerHTML = '';
+            
+            suggestions.forEach((suggestion, index) => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start';
+                li.innerHTML = `
+                    <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestionsList.appendChild(li);
+            });
+        }
+        // 重新测评
+        function restartAssessment() {
+            // 重置状态
+            currentQuestionIndex = 0;
+            answers = {};
+            remainingTime = 20 * 60;
+            assessmentStarted = false;
+            
+            // 清除计时器
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // 隐藏结果页，显示欢迎页
+            resultsScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+            
+            // 重置计时器显示
+            timerDisplay.textContent = '20:00';
+            timerDisplay.classList.remove('text-red-500');
+        }
+        // 保存报告
+        function saveReport() {
+            alert('报告已保存到本地！（实际项目中这里会实现PDF下载功能）');
+        }
+    </script>
+</body>
+</html>
